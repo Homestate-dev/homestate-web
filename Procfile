@@ -1,0 +1,1 @@
+web: gunicorn homestate-web.wsgi --log-file -
