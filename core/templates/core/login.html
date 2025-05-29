@@ -1,3 +1,4 @@
+<!--core/login.html-->
 {% extends 'core/base.html' %}
 {% load static %}
 {% block title %}Login{% endblock %}
@@ -9,7 +10,9 @@
       <img src="{% static 'core/img/logo.png' %}" alt="Logo" style="width: 50px; height: 50px;" class="img-fluid">
       <h4 class="mt-2 mb-0">Iniciar Sesión</h4>
     </div>
-    
+    {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
     <!-- Incluir el componente del formulario -->
     {% include 'core/components/_login_form.html' %}
   </div>
@@ -39,7 +42,7 @@
       .then(userCredential => {
         showMessage('¡Inicio de sesión exitoso! Redirigiendo...', 'success');
         setTimeout(() => {
-          window.location.href = "/";
+          window.location.href = "{% url 'admin-dashboard' %}";
         }, 1000);
       })
       .catch(error => {

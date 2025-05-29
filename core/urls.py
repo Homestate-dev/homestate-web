@@ -1,0 +1,10 @@
+# aqui quiero que pongas el nombre del archivo y dentro del sistema de carpetas donde se encuentra este archivo
+# core/urls.py
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.inicio, name='inicio'),
+    path('admin-login/', views.admin_login,   name='admin-login'),
+    path('admin-dashboard/', views.admin_dashboard, name='admin-dashboard'),
+]
