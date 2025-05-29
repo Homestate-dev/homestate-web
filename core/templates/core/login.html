@@ -3,102 +3,30 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-center align-items-center min-vh-100">
-  <div class="card shadow-sm" style="max-width: 400px; width: 100%;">
+<div class="d-flex justify-content-center align-items-center min-vh-100 p-3">
+  <div class="card shadow-sm w-100" style="max-width: 400px;">
     <div class="card-header text-center text-black">
-      <img src="{% static 'core/img/logo.png' %}" alt="Logo" style="width: 50px; height: 50px;">
-      <!-- Título dinámico -->
-      <h4 id="cardTitle" class="mt-2 mb-0">Iniciar Sesión</h4>
+      <img src="{% static 'core/img/logo.png' %}" alt="Logo" style="width: 50px; height: 50px;" class="img-fluid">
+      <h4 class="mt-2 mb-0">Iniciar Sesión</h4>
     </div>
-    <div class="card-body">
-      <!-- Contenedor de mensajes -->
-      <div id="messageContainer" class="alert d-none" role="alert"></div>
-
-      <form onsubmit="login(event)">
-        <div class="mb-3">
-          <label for="email" class="form-label">Email:</label>
-          <input type="email" id="email" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Contraseña:</label>
-          <input type="password" id="password" class="form-control" required>
-        </div>
-        <div class="mb-3 d-none" id="confirmPasswordContainer">
-          <label for="confirmPassword" class="form-label">Repetir contraseña:</label>
-          <input type="password" id="confirmPassword" class="form-control">
-        </div>
-        <div class="d-grid gap-2">
-          <button type="submit" id="submitButton" class="btn btn-primary">Iniciar sesión</button>
-          <button type="button" id="toggleButton" class="btn btn-secondary" onclick="toggleRegister()">Registrarse</button>
-        </div>
-      </form>
-    </div>
+    
+    <!-- Incluir el componente del formulario -->
+    {% include 'core/components/_login_form.html' %}
   </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-  let isRegistering = false;
-
   function showMessage(message, type = 'warning') {
     const container = document.getElementById('messageContainer');
     container.textContent = message;
-
-    container.className = 'alert';
-    container.classList.add('alert-' + type);
+    container.className = 'alert alert-' + type;
     container.classList.remove('d-none');
 
     setTimeout(() => {
       container.classList.add('d-none');
     }, 5000);
-  }
-
-  function toggleRegister() {
-    isRegistering = !isRegistering;
-
-    const confirmPasswordContainer = document.getElementById('confirmPasswordContainer');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const cardTitle = document.getElementById('cardTitle');
-    const submitButton = document.getElementById('submitButton');
-    const toggleButton = document.getElementById('toggleButton');
-
-    if (isRegistering) {
-      confirmPasswordContainer.classList.remove('d-none');
-      showMessage('Modo registro activado. Completa los campos.', 'warning');
-
-      // Cambiar título de la card
-      cardTitle.textContent = 'Registrarse';
-      cardTitle.classList.add('fw-bold', 'h3');
-      cardTitle.classList.remove('h4');
-
-      // Cambiar texto del botón principal a "Registrar"
-      submitButton.textContent = 'Registrar';
-
-      // Ocultar botón de alternar
-      toggleButton.classList.add('d-none');
-    } else {
-      confirmPasswordContainer.classList.add('d-none');
-      showMessage('Vuelve a iniciar sesión para corroborar tus datos.', 'info');
-
-      // Cambiar título de la card
-      cardTitle.textContent = 'Iniciar Sesión';
-      cardTitle.classList.remove('fw-bold', 'h3');
-      cardTitle.classList.add('h4');
-
-      // Cambiar texto del botón principal a "Iniciar sesión"
-      submitButton.textContent = 'Iniciar sesión';
-
-      // Mostrar botón de alternar nuevamente
-      toggleButton.classList.remove('d-none');
-    }
-
-    // Limpiar campos
-    emailInput.value = '';
-    passwordInput.value = '';
-    const confirmPassInput = document.getElementById('confirmPassword');
-    if (confirmPassInput) confirmPassInput.value = '';
   }
 
   function login(event) {
@@ -107,40 +35,16 @@
     const email = document.getElementById('email').value;
     const pass = document.getElementById('password').value;
 
-    if (isRegistering) {
-      const confirmPass = document.getElementById('confirmPassword').value;
-
-      if (pass !== confirmPass) {
-        showMessage('Las contraseñas no coinciden.', 'danger');
-        return;
-      }
-
-      const passwordRegex = /^(?=.*[a-z])(?=.*\d).{8,}$/;
-      if (!passwordRegex.test(pass)) {
-        showMessage('La contraseña debe tener al menos 8 caracteres, una letra minúscula y un número.', 'danger');
-        return;
-      }
-
-      auth.createUserWithEmailAndPassword(email, pass)
-        .then(userCredential => {
-          showMessage('¡Registro exitoso! Ahora inicia sesión.', 'success');
-          toggleRegister();
-        })
-        .catch(error => {
-          showMessage('Error de registro: ' + error.message, 'danger');
-        });
-    } else {
-      auth.signInWithEmailAndPassword(email, pass)
-        .then(userCredential => {
-          showMessage('¡Inicio de sesión exitoso! Redirigiendo...', 'success');
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 1000);
-        })
-        .catch(error => {
-          showMessage('Error de inicio de sesión: ' + error.message, 'danger');
-        });
-    }
+    auth.signInWithEmailAndPassword(email, pass)
+      .then(userCredential => {
+        showMessage('¡Inicio de sesión exitoso! Redirigiendo...', 'success');
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 1000);
+      })
+      .catch(error => {
+        showMessage('Error de inicio de sesión: ' + error.message, 'danger');
+      });
   }
 </script>
 {% endblock %}

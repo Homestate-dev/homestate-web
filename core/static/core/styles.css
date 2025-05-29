@@ -1,3 +1,19 @@
+
 body {
-    background-color: #f0f0f0;
+  background-color: #f8f9fa;
+}
+
+.card-header img {
+  max-width: 100%;
+  height: auto;
+}
+
+.card {
+  border-radius: 0.75rem;
+}
+
+@media (max-width: 576px) {
+  .card-header h4 {
+    font-size: 1.25rem;
+  }
 }
