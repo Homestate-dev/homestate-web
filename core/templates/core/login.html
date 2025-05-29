@@ -1,0 +1,49 @@
+{% extends 'core/base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<h2>Iniciar Sesión</h2>
+<form onsubmit="login(event)">
+  <div class="mb-3">
+    <label>Email:</label>
+    <input type="email" id="email" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label>Contraseña:</label>
+    <input type="password" id="password" class="form-control" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+  <button type="button" class="btn btn-secondary" onclick="register()">Registrarse</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Login
+  function login(event) {
+    event.preventDefault();
+    const email = document.getElementById('email').value;
+    const pass = document.getElementById('password').value;
+    auth.signInWithEmailAndPassword(email, pass)
+      .then(userCredential => {
+        alert('¡Inicio de sesión exitoso!');
+        window.location.href = "/"; // redirigir a inicio
+      })
+      .catch(error => {
+        alert('Error de inicio de sesión: ' + error.message);
+      });
+  }
+
+  // Registro
+  function register() {
+    const email = document.getElementById('email').value;
+    const pass = document.getElementById('password').value;
+    auth.createUserWithEmailAndPassword(email, pass)
+      .then(userCredential => {
+        alert('¡Registro exitoso! Ahora inicia sesión.');
+      })
+      .catch(error => {
+        alert('Error de registro: ' + error.message);
+      });
+  }
+</script>
+{% endblock %}

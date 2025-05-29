@@ -3,7 +3,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>{% block title %}Mi Proyecto{% endblock %}</title>
+  <title>{% block title %}HomEstate{% endblock %}</title>
   <!-- Bootstrap desde CDN (opcional) -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <!-- Tu archivo CSS -->
@@ -25,5 +25,27 @@
 
   <!-- Bootstrap JS (opcional) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+
+  <script>
+    // Configura tu Firebase (rellena con tus datos reales)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDBcoekIwqAIsRXGEAfWriq4Lznhab_Vgg",
+      authDomain: "homestate-web.firebaseapp.com",
+      projectId: "homestate-web",
+      storageBucket: "homestate-web.firebasestorage.app",
+      messagingSenderId: "738439557061",
+      appId: "1:738439557061:web:1ac96b5c9ad1cd2fe3a5ac",
+      measurementId: "G-J7YCQB6HBV"
+
+    };
+
+    // Inicializa Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+  </script>
+
 </body>
 </html>
