@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
 :root {
     --primary-color: #fa822c;
     --primary-hover: #d15903;
@@ -124,15 +126,24 @@ body {
     animation: fadeIn 0.5s ease-out;
 }
 
+.logo-img {
+  width: 100px;
+  height: 100px;
+  padding: 16px; /* ajusta el valor que necesites */
+}
+
 .login-header {
     text-align: center;
     margin-bottom: 30px;
+    
 }
 
 .login-header h4 {
-    color: var(--primary-color);
+    color: var(--shadow-sm);
     font-size: 1.8rem;
     margin-bottom: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
 }
 
 .login-header p {
