@@ -9,5 +9,5 @@ def inicio(request):
 def admin_login(request):
     return render(request, 'core/login.html')
 
-def admin_dashboard(request):
+def admin(request):
     return render(request, 'core/admin/dashboard.html')

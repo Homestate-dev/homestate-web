@@ -1,8 +1,59 @@
+{# core/templates/core/admin/dashboard.html #}
 {% extends 'core/base.html' %}
+{% load static %}
+
 {% block title %}Panel Admin{% endblock %}
+
 {% block content %}
 <div class="container py-5">
-  <h1>Bienvenido al Panel de Administración</h1>
-  <!-- aquí tu navegación y widgets personalizados -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Bienvenido al Panel de Administración</h1>
+    <!-- Botón Cerrar Sesión -->
+    <button id="logoutBtn" class="btn btn-outline-danger">Cerrar Sesión</button>
+  </div>
+
+  <!-- Aquí podrías agregar tu navegación, widgets personalizados, etc. -->
+  <p>Aquí va el contenido del panel...</p>
 </div>
+{% endblock %}
+
+
+{% block scripts %}
+
+
+  <script>
+
+    // —————— 3) Verificar estado de autenticación ——————
+    // Si no hay usuario, redirigir a la página de login
+    firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+        window.location.href = "{% url 'admin-login' %}";
+      }
+    });
+
+    // —————— 4) Función para cerrar sesión ——————
+    function logout() {
+      auth.signOut()
+        .then(() => {
+          // Desconexión exitosa, redirigir al login
+          window.location.href = "{% url 'admin-login' %}";
+        })
+        .catch((error) => {
+          console.error("Error al cerrar sesión:", error);
+          // Opcional: mostrar mensaje de error al usuario
+          alert("No se pudo cerrar sesión. Intenta de nuevo.");
+        });
+    }
+
+    // —————— 5) Asociar el botón “Cerrar Sesión” a la función logout() ——————
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnLogout = document.getElementById('logoutBtn');
+      if (btnLogout) {
+        btnLogout.addEventListener('click', (e) => {
+          e.preventDefault();
+          logout();
+        });
+      }
+    });
+  </script>
 {% endblock %}
