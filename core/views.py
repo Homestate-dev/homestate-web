@@ -8,8 +8,7 @@ def inicio(request):
 def admin_login(request):
     return render(request, 'core/login.html')
 
-def admin(request):
-    
+def admin(request):    
     user_email = request.GET.get('email')
     if not user_email:
         return redirect('admin-login')
@@ -42,3 +41,12 @@ def building_create(request):
 
     # Si es GET, simplemente renderizamos el formulario sin contexto especial.
     return render(request, 'core/building/create.html', { 'user_email': user_email })
+
+
+def admin_crud(request):
+    user_email = request.GET.get('email')
+    if not user_email:
+        # Si no hay email, nadie debería ver esta pantalla. Redirigimos al login.
+        return redirect('admin-login')
+    
+    return render(request, 'core/admin/crud.html', { 'user_email': user_email })

@@ -17,6 +17,9 @@
   <p>Aquí va el contenido del panel...</p>
    <a href="{% url 'building-create' %}?email={{ user_email }}">
   <button>Crear Departamento</button>
-</a>
+  </a>
+   <a href="{% url 'admin-crud' %}?email={{ user_email }}">
+  <button>Administrar Administradores</button>
+  </a>
 </div>
 {% endblock %}
