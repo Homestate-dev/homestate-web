@@ -1,0 +1,167 @@
+// static/core/js/auth-logic.js
+// -----------------------------
+// Aquí va toda la lógica de Firebase Auth que antes estaba en main.js
+// Lo agrupamos dentro de una única función initAuthLogic() y la exportamos.
+
+export function initAuthLogic() {
+  // 1) Configura tu Firebase (reemplaza con tus datos reales)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDBcoekIwqAIsRXGEAfWriq4Lznhab_Vgg",
+    authDomain: "homestate-web.firebaseapp.com",
+    projectId: "homestate-web",
+    storageBucket: "homestate-web.appspot.com",
+    messagingSenderId: "738439557061",
+    appId: "1:738439557061:web:1ac96b5c9ad1cd2fe3a5ac",
+    measurementId: "G-J7YCQB6HBV"
+  };
+
+  // 2) Inicializa Firebase solo si no ha sido inicializado antes
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+
+  // 3) Crea la instancia de auth UNA VEZ
+  const auth = firebase.auth();
+
+  console.log("Firebase Auth initialized");
+
+  // 4) Listener único de onAuthStateChanged:
+  auth.onAuthStateChanged((user) => {
+    const currentPath = window.location.pathname;
+
+    // Caso 1: usuario NO autenticado intentando acceder a /admin/
+    if (!user) {
+      const isTryingAdmin =
+        currentPath === "/admin/" ||
+        (currentPath.startsWith("/admin/") && !currentPath.startsWith("/admin-login/"));
+
+      if (isTryingAdmin) {
+        window.location.href = "/admin-login/";
+      }
+      return;
+    }
+
+    // Caso 2: usuario autenticado, y está en /admin-login/
+    if (currentPath === "/admin-login/") {
+      const correo = encodeURIComponent(user.email);
+      window.location.href = `/admin/?email=${correo}`;
+    }
+    // Si ya está en /admin/ o en cualquier otra ruta distinta a /admin-login/,
+    // no hacemos nada más.
+  });
+
+  // 5) Espera a que el DOM esté cargado para enlazar botones y formularios
+  document.addEventListener('DOMContentLoaded', () => {
+    // Toggle eye/eye-slash para mostrar/ocultar contraseña
+    const togglePassword = document.querySelector('.toggle-password');
+    const passwordInput = document.getElementById('password');
+    const rememberCheckbox = document.getElementById('remember');
+
+    // Cargar credenciales guardadas (si existe “Recuérdame”)
+    const savedUsername = localStorage.getItem('username');
+    const savedPassword = localStorage.getItem('password');
+    if (savedUsername && savedPassword) {
+      document.getElementById('email').value = savedUsername;
+      passwordInput.value = savedPassword;
+      rememberCheckbox.checked = true;
+    }
+
+    if (togglePassword) {
+      togglePassword.addEventListener('click', () => {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        togglePassword.querySelector('i').classList.toggle('fa-eye');
+        togglePassword.querySelector('i').classList.toggle('fa-eye-slash');
+      });
+    }
+
+    // Enlaces de “Registrarme” y “Olvidé mi contraseña”
+    const registerLink = document.getElementById('registerLink');
+    if (registerLink) {
+      registerLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Funcionalidad de registro en desarrollo');
+      });
+    }
+    const forgotLink = document.querySelector('.forgot-password');
+    if (forgotLink) {
+      forgotLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Funcionalidad de recuperación de contraseña en desarrollo');
+      });
+    }
+
+    // Vinculamos la función login() al submit del formulario
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+      loginForm.addEventListener('submit', login);
+    }
+
+    // Vinculamos la función logout() al botón correspondiente
+    const btnLogout = document.getElementById('logoutBtn');
+    if (btnLogout) {
+      btnLogout.addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+      });
+    }
+  });
+
+  // Función para mostrar mensajes temporales (alertas)
+  function showMessage(message, type = 'warning') {
+    const container = document.getElementById('messageContainer');
+    container.textContent = message;
+    container.className = 'alert alert-' + type + ' mx-4';
+    container.classList.remove('d-none');
+    setTimeout(() => {
+      container.classList.add('d-none');
+    }, 5000);
+  }
+
+  // Función de login usando la instancia de auth
+  function login(event) {
+    event.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const pass = document.getElementById('password').value;
+    const rememberCheckbox = document.getElementById('remember');
+
+    auth.signInWithEmailAndPassword(email, pass)
+      .then(() => {
+        showMessage('¡Inicio de sesión exitoso! Redirigiendo...', 'success');
+
+        if (rememberCheckbox.checked) {
+          localStorage.setItem('username', email);
+          localStorage.setItem('password', pass);
+        } else {
+          localStorage.removeItem('username');
+          localStorage.removeItem('password');
+        }
+
+        // La redirección real ocurre en onAuthStateChanged
+      })
+      .catch(error => {
+        console.log(error.code);
+        switch (error.code) {
+          case 'auth/invalid-login-credentials':
+            showMessage('Usuario no existe o la contraseña es incorrecta', 'danger');
+            break;
+          default:
+            showMessage('Corroborando su identidad.', 'warning');
+        }
+      });
+  }
+
+  // Función de logout
+  function logout() {
+    auth.signOut()
+      .then(() => {
+        console.log("Sesión cerrada correctamente");
+        // onAuthStateChanged redirigirá a /admin-login/
+      })
+      .catch((error) => {
+        console.error("Error al cerrar sesión:", error);
+        alert("No se pudo cerrar sesión. Intenta de nuevo.");
+      });
+  }
+}
