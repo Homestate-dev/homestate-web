@@ -38,29 +38,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
-  <script>
-    // Configura tu Firebase (rellena con tus datos reales)
-    const firebaseConfig = {
-      apiKey: "AIzaSyDBcoekIwqAIsRXGEAfWriq4Lznhab_Vgg",
-      authDomain: "homestate-web.firebaseapp.com",
-      projectId: "homestate-web",
-      storageBucket: "homestate-web.appspot.com",
-      messagingSenderId: "738439557061",
-      appId: "1:738439557061:web:1ac96b5c9ad1cd2fe3a5ac",
-      measurementId: "G-J7YCQB6HBV"
-    };
+  <script src="{% static 'core/js/main.js' %}"></script>
 
-    // Inicializa Firebase
-    firebase.initializeApp(firebaseConfig);
-     // 3) Crea la instancia de auth UNA VEZ:
-    const auth = firebase.auth();
-
-    console.log("Firebase Auth initialized");
-
-  </script>
-
-  <!-- Bloque para scripts específicos de cada vista -->
-  {% block scripts %}
-  {% endblock %}
 </body>
 </html>
