@@ -2,3 +2,9 @@ LANZAR PRUEBAS LOCALES:
     1 - venv\Scripts\activate
     2 - python manage.py runserver
     3 - 127.0.0.7:8000
+
+
+
+GENERAR LAS MIGRACIONES
+1 - python manage.py makemigrations core
+2 - python manage.py migrate

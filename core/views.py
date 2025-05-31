@@ -24,7 +24,7 @@ def building_create(request):
         direccion = request.POST.get('direccion')
 
         # Imprimimos en la consola de Django que recibimos los valores:
-        print(f"Datos recibidos para crear edificio → Nombre: {nombre}, Dirección: {direccion}")
+        print(f"Llegaron los datos del Edificio → ID: {nombre}, Nombre: {direccion}")
 
         contexto = {
             'mensaje_exito': "¡Se recibieron correctamente los datos!",
