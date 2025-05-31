@@ -17,4 +17,8 @@
   </form>
 
   <!-- Enlace para volver al dashboard -->
-  <p><a href="{% url 'admin' %}">← Volver al Dashboard</a></p>
+<p>
+  <a href="{% url 'admin' %}?email={{ user_email }}">
+    ← Volver al Dashboard
+  </a>
+</p>
