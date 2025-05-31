@@ -44,7 +44,8 @@ auth.onAuthStateChanged((user) => {
   // Caso 2: usuario autenticado, pero está en la página de login (/admin-login/)
   //          => lo enviamos al dashboard /admin/.
   if (user && currentPath === "/admin-login/") {
-    window.location.href = "/admin/";
+     const correo = encodeURIComponent(user.email);
+     window.location.href = `/admin/?email=${correo}`;
   }
 
   // En cualquier otro caso (usuario autenticado y/o ruta distinta a /admin/ o /admin-login/),
