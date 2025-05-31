@@ -1,4 +1,4 @@
-# aqui quiero que pongas el nombre del archivo y dentro del sistema de carpetas donde se encuentra este archivo
+
 # core/urls.py
 from django.urls import path
 from . import views
