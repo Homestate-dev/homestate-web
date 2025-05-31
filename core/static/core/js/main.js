@@ -27,18 +27,30 @@ console.log("Firebase Auth initialized");
 auth.onAuthStateChanged((user) => {
   const currentPath = window.location.pathname;
 
-  if (user) {
-    // Si el usuario está autenticado y no está ya en /admin/, redirige
-    if (currentPath !== "/admin/") {
-      window.location.href = "/admin/";
-    }
-  } else {
-    // Si NO hay usuario y no está ya en /admin-login/, redirige al login
-    if (currentPath !== "/admin-login/") {
+  // Caso 1: usuario NO autenticado intentando acceder a /admin/ (o a cualquier subruta de /admin/),
+  //          excepto /admin-login/, en cuyo caso no hacemos nada aquí.
+  if (!user) {
+    // Solo si la ruta es exactamente "/admin/" o empieza con "/admin/" (pero no "/admin-login/")
+    const isTryingAdmin =
+      currentPath === "/admin/" ||
+      (currentPath.startsWith("/admin/") && !currentPath.startsWith("/admin-login/"));
+
+    if (isTryingAdmin) {
       window.location.href = "/admin-login/";
     }
+    return;
   }
+
+  // Caso 2: usuario autenticado, pero está en la página de login (/admin-login/)
+  //          => lo enviamos al dashboard /admin/.
+  if (user && currentPath === "/admin-login/") {
+    window.location.href = "/admin/";
+  }
+
+  // En cualquier otro caso (usuario autenticado y/o ruta distinta a /admin/ o /admin-login/),
+  // no hacemos nada.
 });
+
 
 // 5) Espera a que el DOM esté cargado
 document.addEventListener('DOMContentLoaded', () => {
